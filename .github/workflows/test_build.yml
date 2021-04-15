@@ -10,6 +10,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - run : docker build -t b517047/docker-cicd:latest .
-      - run : docker login -u b517047 -p ${{secrets.DOCKER_PASS}}
-      - run : docker push b517047/docker-cicd:latest
+
+       name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: b517047
+          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Build and push
+        id  : docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: b517047/docker-cicd:version2
